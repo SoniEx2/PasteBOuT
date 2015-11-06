@@ -39,6 +39,7 @@ public class PBListener extends ListenerAdapter {
             URL url = new URL(target);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
+            if (conn.getResponseCode() != 200) continue;
             BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line;
             String lastLine = null;
