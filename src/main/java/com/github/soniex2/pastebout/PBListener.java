@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  */
 public class PBListener extends ListenerAdapter {
 
-    Pattern pastebin = Pattern.compile("(^| )http://pastebin.com/([a-zA-Z0-9]+)");
+    Pattern pastebin = Pattern.compile("(^| )http://pastebin.com/([a-zA-Z0-9]+)($| )");
 
     @Override
     public void onMessage(MessageEvent event) throws Exception {
