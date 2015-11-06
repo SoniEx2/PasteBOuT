@@ -1,0 +1,15 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+repositories {
+  jcenter()
+  maven {
+    name = "sonatype"
+    url = "https://oss.sonatype.org/content/repositories/snapshots/"
+  }
+}
+
+dependencies {
+  compile 'org.pircbotx:pircbotx:2.1-SNAPSHOT'
+  compile 'org.slf4j:slf4j-simple:1.7.12'
+}
