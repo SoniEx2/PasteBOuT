@@ -43,16 +43,17 @@ public class PBListener extends ListenerAdapter {
             if (conn.getContentLengthLong() >= 32768) continue;
             BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line;
-            String lastLine = null;
-            int count = 3;
-            while ((line = rd.readLine()) != null && count-- > 0) {
-                // You can put it at the end, according to the spec @ https://github.com/SoniEx2/CTCP-S
-                if (lastLine != null) event.respondChannel(lastLine + batch);
-                lastLine = line;
+            StringBuilder out = new StringBuilder();
+            while ((line = rd.readLine()) != null) {
+                if (line.length() + out.length() < 450) {
+                    out.append(line)
+                            .append("\020n"); // newline, according to http://www.irchelp.org/irchelp/rfc/ctcpspec.html
+                } else {
+                    out.append("Output truncated.\020n");
+                    break;
+                }
             }
-            if (count < 0)
-                lastLine = "Output truncated.";
-            event.respondChannel(lastLine + batchend);
+            event.respondChannel(out.substring(0, out.length() - 2));
             rd.close();
         }
     }
