@@ -40,14 +40,16 @@ public class PBListener extends ListenerAdapter {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             if (conn.getResponseCode() != 200) continue;
+            if (conn.getContentLengthLong() >= 32768) continue;
             BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line;
             String lastLine = null;
             while ((line = rd.readLine()) != null) {
-                if (lastLine != null) event.respondChannel(batch + lastLine);
+                // You can put it at the end, according to the spec @ https://github.com/SoniEx2/CTCP-S
+                if (lastLine != null) event.respondChannel(lastLine + batch);
                 lastLine = line;
             }
-            event.respondChannel(batchend + lastLine);
+            event.respondChannel(lastLine + batchend);
             rd.close();
         }
     }
