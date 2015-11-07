@@ -44,11 +44,14 @@ public class PBListener extends ListenerAdapter {
             BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line;
             String lastLine = null;
-            while ((line = rd.readLine()) != null) {
+            int count = 3;
+            while ((line = rd.readLine()) != null && count-- > 0) {
                 // You can put it at the end, according to the spec @ https://github.com/SoniEx2/CTCP-S
                 if (lastLine != null) event.respondChannel(lastLine + batch);
                 lastLine = line;
             }
+            if (count < 0)
+                lastLine = "Output truncated.";
             event.respondChannel(lastLine + batchend);
             rd.close();
         }
